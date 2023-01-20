@@ -17,8 +17,19 @@ public interface UserRepository extends JpaRepository<User, String>, JpaSpecific
 
     User findByUsername(String username);
 
+    User findByEmail(String email);
+
     @Override
     Page<User> findAll(Specification<User> specification, Pageable pageable);
+
+
+//    Page<User> findAllByGroups_IdAAndUsernameContainsAndAirplaneCompany_IdContains(String id, String username, String orgId, Pageable pageable);
+
+    Page<User> findAllByGroups_IdAndUsernameContainsAndAirplaneCompany_IdContains(String id, String username, String orgId, Pageable pageable);
+
+    List<User> findAllByGroups_IdAndUsernameContainsAndAirplaneCompany_IdContains(String id, String username, String orgId);
+
+    Page<User> findAllByIdNotInAndUsernameContainsAndAirplaneCompany_IdContains(List<String> id, String username, String orgId, Pageable pageable);
 
     List<User> findAllByAirplaneCompany_Id(String airplaneCompanyId);
 

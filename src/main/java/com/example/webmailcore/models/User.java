@@ -1,6 +1,7 @@
 package com.example.webmailcore.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -48,6 +49,10 @@ public class User  extends AbstractEntity implements Serializable {
 
     @Transient
     private List<Privilege> privileges = new ArrayList<>();
+
+    @Transient
+    @JsonProperty
+    private String newPassword;
 
     public String getDisplayName() {
         return this.getFirstName() + " " + this.getLastName();
