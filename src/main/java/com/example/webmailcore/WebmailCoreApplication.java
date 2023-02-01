@@ -38,7 +38,8 @@ public class WebmailCoreApplication {
         PrivilegeService privilegeService = (PrivilegeService) context.getBean("privilegeService");
         AirplaneCompanyService airplaneCompanyService = (AirplaneCompanyService) context.getBean("airplaneCompanyService");
 
-        ImportData.importBasicUsersGroupsPrivilegesData(userService, groupService, privilegeService, airplaneCompanyService);
+        //TODO: fix
+//        ImportData.importBasicUsersGroupsPrivilegesData(userService, groupService, privilegeService, airplaneCompanyService);
 
     }
 

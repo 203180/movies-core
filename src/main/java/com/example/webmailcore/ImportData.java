@@ -1,5 +1,6 @@
 package com.example.webmailcore;
 
+import com.example.webmailcore.enums.AirplaneCompanyType;
 import com.example.webmailcore.models.AirplaneCompany;
 import com.example.webmailcore.models.Group;
 import com.example.webmailcore.models.Privilege;
@@ -49,23 +50,33 @@ public class ImportData {
             groupService.addPrivilege(astraAirAdminGroup.getId(), privilegeAdministration);
         }
 
+        Group astraAirAgentsGroup = groupService.findGroupByCode("ASTRA_AIR_AGENTS");
+        if (astraAirAgentsGroup == null) {
+            Group group = new Group();
+            group.setCode("ASTRA_AIR_AGENTS");
+            group.setName("Agents - Astra Air");
+            astraAirAgentsGroup = groupService.create(group);
+            groupService.addPrivilege(astraAirAgentsGroup.getId(), privilegeAgent);
+        }
+
         Group astraAirClientGroup = groupService.findGroupByCode("ASTRA_AIR_CLIENT");
         if (astraAirClientGroup == null) {
             Group group = new Group();
             group.setCode("ASTRA_AIR_CLIENT");
             group.setName("Clients - Аста Адриа");
             astraAirClientGroup = groupService.create(group);
-//            groupService.addPrivilege(astraAirClientGroup.getId(), privilegeClient);
+            groupService.addPrivilege(astraAirClientGroup.getId(), privilegeClient);
         }
 
         AirplaneCompany astraAirOrg = airplaneCompanyService.findByNameEn("ASTRA AIR");
         if (astraAirOrg == null) {
             AirplaneCompany airplaneCompany = new AirplaneCompany();
-            airplaneCompany.setName("Astra Air");
-            astraAirOrg = airplaneCompanyService.save(airplaneCompany);
+            airplaneCompany.setName("Аста Адриа");
+            airplaneCompany.setType(AirplaneCompanyType.ASTRA_OFFICE);
+            airplaneCompany = airplaneCompanyService.save(airplaneCompany);
             groupService.addGroupToAirplaneCompany(astraAirAdminGroup.getId(), astraAirOrg.getId());
             groupService.addGroupToAirplaneCompany(astraAirClientGroup.getId(), astraAirOrg.getId());
-            groupService.addGroupToAirplaneCompany(astraAirClientGroup.getId(), astraAirOrg.getId());
+            groupService.addGroupToAirplaneCompany(astraAirAgentsGroup.getId(), astraAirOrg.getId());
         }
 
         User rootUser = userService.getUserByUsername("root");

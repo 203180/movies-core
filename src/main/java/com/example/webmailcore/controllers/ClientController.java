@@ -1,27 +1,27 @@
 package com.example.webmailcore.controllers;
 
-import com.example.webmailcore.models.City;
-import com.example.webmailcore.services.CityService;
+import com.example.webmailcore.models.Client;
+import com.example.webmailcore.models.Country;
+import com.example.webmailcore.services.ClientService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping("/cities")
-public class CityController {
+@RequestMapping("/clients")
+public class ClientController {
 
     @Autowired
-    CityService cityService;
+    ClientService service;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity getAllCities(
+    public ResponseEntity getAllCountries(
             @RequestParam(value = "page") Integer page,
             @RequestParam(value = "size") Integer size,
             @RequestParam(value = "orderBy") String orderBy,
@@ -30,37 +30,31 @@ public class CityController {
     ) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         HashMap filterMap = objectMapper.readValue(searchParams, HashMap.class);
-        return ResponseEntity.ok(cityService.all(filterMap, PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(orderDirection), orderBy))));
+        return ResponseEntity.ok(service.all(filterMap, PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(orderDirection), orderBy))));
     }
 
-//    @Secured({"ROLE_ADMINISTRATION", "ROLE_ASTA_ADRIA_AGENT"})
     @RequestMapping(path = "/all",method = RequestMethod.GET)
-    public ResponseEntity getAllCitiesWithoutPaging() throws IOException {
-        return ResponseEntity.ok(cityService.getAll());
+    public ResponseEntity getAllClientsWithoutPaging() throws IOException {
+        return ResponseEntity.ok(service.getAll());
     }
-
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity getCity(@PathVariable(value = "id") String id) {
-        return ResponseEntity.ok(cityService.getById(id));
+    public ResponseEntity getById(@PathVariable(value = "id") String id) {
+        return ResponseEntity.ok(service.getById(id));
     }
 
-//    @Secured({"ROLE_ADMINISTRATION"})
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity createCity(@RequestBody City city) {
-        return ResponseEntity.ok(cityService.create(city));
+    public ResponseEntity create(@RequestBody Client client) {
+        return ResponseEntity.ok(service.create(client));
     }
 
-//    @Secured({"ROLE_ADMINISTRATION"})
     @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity updateCity(@RequestBody City city) {
-        return ResponseEntity.ok(cityService.update(city));
+    public ResponseEntity update(@RequestBody Client client) {
+        return ResponseEntity.ok(service.update(client));
     }
 
-//    @Secured({"ROLE_ADMINISTRATION"})
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteCity(@PathVariable(value = "id") String id) {
-        return ResponseEntity.ok(cityService.delete(id));
+    public ResponseEntity delete(@PathVariable(value = "id") String id) {
+        return ResponseEntity.ok(service.delete(id));
     }
-
 }

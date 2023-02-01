@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CountryRepository extends JpaRepository<Country, String>, JpaSpecificationExecutor<Country> {
     Page<Country> findAll(Specification<Country> specification, Pageable pageable);
+    Country findByCode(String code);
 }

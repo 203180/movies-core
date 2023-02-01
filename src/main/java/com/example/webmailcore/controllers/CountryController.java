@@ -1,5 +1,7 @@
 package com.example.webmailcore.controllers;
 
+import com.example.webmailcore.exceptions.BadRequestError;
+import com.example.webmailcore.models.Country;
 import com.example.webmailcore.services.CountryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,4 +44,21 @@ public class CountryController {
         return ResponseEntity.ok(countryService.getById(id));
     }
 
+//    @Secured({"ROLE_ADMINISTRATION"})
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity createCountry(@RequestBody Country country) {
+        return ResponseEntity.ok(countryService.create(country));
+    }
+
+//    @Secured({"ROLE_ADMINISTRATION"})
+    @RequestMapping(method = RequestMethod.PUT)
+    public ResponseEntity updateCountry(@RequestBody Country country) {
+        return ResponseEntity.ok(countryService.update(country));
+    }
+
+//    @Secured({"ROLE_ADMINISTRATION"})
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteCountry(@PathVariable(value = "id") String id) {
+        return ResponseEntity.ok(countryService.delete(id));
+    }
 }

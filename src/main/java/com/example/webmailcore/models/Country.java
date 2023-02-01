@@ -27,4 +27,7 @@ public class Country extends AbstractEntity implements Serializable {
     @Column(name = "CODE")
     private String code;
 
+    @Column(name = "CAPITAL")
+    private String capital;
+
 }

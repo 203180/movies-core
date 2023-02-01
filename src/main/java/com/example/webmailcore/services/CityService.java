@@ -18,6 +18,10 @@ public class CityService {
     @Autowired
     CityRepository repository;
 
+    public List<City> getAll() {
+        return repository.findAll();
+    }
+
     public Page<City> all(Map<String, String> params, Pageable pageable) {
         CitySpecification citySpecification = new CitySpecification();
         Iterator<Map.Entry<String, String>> iterator = params.entrySet().iterator();
@@ -28,4 +32,27 @@ public class CityService {
         City city = repository.getById(id);
         return city;
     }
+
+    public Boolean exists(String id) {
+        return repository.existsById(id);
+    }
+
+    public City create(City city) {
+        return repository.save(city);
+    }
+
+    public City update(City city) {
+        return repository.save(city);
+    }
+
+    public List<City> saveAll(List<City> cities) {
+        return repository.saveAll(cities);
+    }
+
+    public Boolean delete(String id) {
+        City city = repository.getById(id);
+        repository.delete(city);
+        return true;
+    }
+
 }
