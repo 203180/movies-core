@@ -23,6 +23,16 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @RequestMapping(path = "/allByUser/{userId}",method = RequestMethod.GET)
+    public ResponseEntity getAllTicketsByUser(@PathVariable(value = "userId") String userId) throws IOException {
+        return ResponseEntity.ok(userService.getAllTicketsByUser(userId));
+    }
+
+    @RequestMapping(path = "/all",method = RequestMethod.GET)
+    public ResponseEntity getAllWithoutPaging() throws IOException {
+        return ResponseEntity.ok(userService.getAll());
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity getAllUsers(
             @RequestParam(value = "page") Integer page,
@@ -85,7 +95,7 @@ public class UserController {
     public ResponseEntity getCurrentUserDetails() {
         return ResponseEntity.ok(userService.getCurrentUser());
     }
-    @Secured({"ROLE_ADMINISTRATION", "ROLE_CLIENT_ADMIN"})
+//    @Secured({"ROLE_ADMINISTRATION", "ROLE_CLIENT_ADMIN"})
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity createUser(@RequestBody User user) throws BadRequestError {
         return ResponseEntity.ok(userService.save(user));

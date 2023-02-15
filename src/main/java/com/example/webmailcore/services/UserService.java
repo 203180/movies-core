@@ -3,6 +3,8 @@ package com.example.webmailcore.services;
 import com.example.webmailcore.auth.CustomUserDetails;
 import com.example.webmailcore.enums.MailMessageStatus;
 import com.example.webmailcore.enums.MailTemplateType;
+import com.example.webmailcore.models.Country;
+import com.example.webmailcore.models.FlightTicket;
 import com.example.webmailcore.models.User;
 import com.example.webmailcore.models.idm.ForgotPasswordToken;
 import com.example.webmailcore.models.mail.MailMessage;
@@ -48,9 +50,17 @@ public class UserService {
     @Value("${app.base.url}")
     String BASE_URL;
 
+    public List<FlightTicket> getAllTicketsByUser(String username) {
+        List<FlightTicket> tickets = repository.findAllByUsername(username);
+        return tickets;
+    }
 
     public Page<User> all(Pageable pageable) {
         return repository.findAll(pageable);
+    }
+
+    public List<User> getAll() {
+        return repository.findAll();
     }
 
     public List<User> allAirplaneCompanyMembers(String airplaneCompanyId) {

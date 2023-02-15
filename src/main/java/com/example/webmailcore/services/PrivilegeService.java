@@ -1,5 +1,6 @@
 package com.example.webmailcore.services;
 
+import com.example.webmailcore.auth.CustomUserDetails;
 import com.example.webmailcore.models.Privilege;
 import com.example.webmailcore.repositories.PrivilegeRepository;
 import com.example.webmailcore.repositories.specifications.PrivilegeSpecification;
@@ -13,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -20,6 +22,9 @@ public class PrivilegeService {
 
     @Autowired
     PrivilegeRepository privilegeRepository;
+
+    @Autowired
+    UserService userService;
 
     public Page<Privilege> all(Map<String, String> params, Pageable pageable) {
         PrivilegeSpecification privilegeSpecification = new PrivilegeSpecification();
@@ -34,6 +39,15 @@ public class PrivilegeService {
         return privilegeRepository.findAll(privilegeSpecification, pageable);
     }
 
+    public List<Privilege> all() {
+        List<Privilege> privileges = privilegeRepository.findAll();
+        CustomUserDetails customUserDetails = userService.getCurrentUserDetails();
+        if (!customUserDetails.getAuthorities().stream().anyMatch(r -> r.getAuthority().startsWith("ROLE_ADMINISTRATION"))) {
+            privileges.removeIf(p -> p.getName().equals("ADMINISTRATION"));
+        }
+        return privileges;
+    }
+
     public Privilege get(String id) {
         return privilegeRepository.getById(id);
     }
@@ -44,5 +58,11 @@ public class PrivilegeService {
 
     public Privilege save(Privilege privilege) {
         return privilegeRepository.save(privilege);
+    }
+
+    public Boolean remove(String id) {
+        Privilege privilegeToRemove = privilegeRepository.getById(id);
+        privilegeRepository.delete(privilegeToRemove);
+        return true;
     }
 }

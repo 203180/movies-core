@@ -20,4 +20,7 @@ public class DestinationRegion extends AbstractEntity {
     @Column(name = "NAME", nullable = false)
     private String name;
 
+    @Column(name = "CODE")
+    private String code;
+
 }

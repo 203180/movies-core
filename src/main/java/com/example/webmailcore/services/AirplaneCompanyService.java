@@ -2,6 +2,7 @@ package com.example.webmailcore.services;
 
 import com.example.webmailcore.enums.AirplaneCompanyType;
 import com.example.webmailcore.models.AirplaneCompany;
+import com.example.webmailcore.models.Country;
 import com.example.webmailcore.models.Group;
 import com.example.webmailcore.models.Privilege;
 import com.example.webmailcore.repositories.AirplaneCompanyRepository;
@@ -30,6 +31,10 @@ public class AirplaneCompanyService {
     @Autowired
     GroupService groupService;
 
+    public List<AirplaneCompany> getAll() {
+        return repository.findAll();
+    }
+
     public Page<AirplaneCompany> all(Pageable pageable) {
         return repository.findAll(pageable);
     }
@@ -40,10 +45,11 @@ public class AirplaneCompanyService {
         return repository.findAll(airplaneCompanySpecification, pageable);
     }
 
-    public List<AirplaneCompany> all() {
-        List<AirplaneCompany> airplaneCompanies = new ArrayList<>();
-        return airplaneCompanies.stream().map(AirplaneCompany::toAirplaneCompanyDTO).collect(Collectors.toList());
-    }
+//    public List<AirplaneCompany> all() {
+//        List<AirplaneCompany> airplaneCompanies = new ArrayList<>();
+//        return airplaneCompanies.stream().map(AirplaneCompany::toAirplaneCompanyDTO).collect(Collectors.toList());
+//    }
+
 
     public AirplaneCompany findByNameEn(String nameEn) {
         return repository.findByName(nameEn);
@@ -54,15 +60,15 @@ public class AirplaneCompanyService {
     }
 
     public AirplaneCompany create(AirplaneCompany airplaneCompany) {
-        if (airplaneCompany.getType().equals(AirplaneCompanyType.CLIENT)) {
-            Privilege clientAdminRole = privilegeService.findByName("CLIENT_ADMIN");
-            Privilege clientRole = privilegeService.findByName("CLIENT");
+//        if (airplaneCompany.getType().equals(AirplaneCompanyType.CLIENT)) {
+//            Privilege clientAdminRole = privilegeService.findByName("CLIENT_ADMIN");
+//            Privilege clientRole = privilegeService.findByName("CLIENT");
+//            airplaneCompany = repository.save(airplaneCompany);
+//            createAdminGroupForOrg(airplaneCompany, clientAdminRole);
+//            createClientGroupForOrg(airplaneCompany, clientRole);
+//        } else {
             airplaneCompany = repository.save(airplaneCompany);
-            createAdminGroupForOrg(airplaneCompany, clientAdminRole);
-            createClientGroupForOrg(airplaneCompany, clientRole);
-        } else {
-            airplaneCompany = repository.save(airplaneCompany);
-        }
+//        }
         return airplaneCompany;
     }
 

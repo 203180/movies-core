@@ -18,4 +18,3 @@ public class Privilege extends AbstractEntity implements Serializable {
     private String name;
 
 }
-

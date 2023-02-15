@@ -33,4 +33,18 @@ public class DestinationService {
         return destination;
     }
 
+    public Destination create(Destination destination) {
+        return repository.save(destination);
+    }
+
+    public Destination update(Destination destination) {
+        return repository.save(destination);
+    }
+
+    public Boolean delete(String id) {
+        Destination destination = repository.getById(id);
+        repository.delete(destination);
+        return true;
+    }
+
 }

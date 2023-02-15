@@ -37,11 +37,13 @@ public class AirplaneCompanyController {
 
     @RequestMapping(path = "/all", method = RequestMethod.GET)
     public List<AirplaneCompany> getAllAirplaneCompaniesWithoutPaging() {
-        return service.all();
+        return service.getAll();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity createOrganization(@RequestBody AirplaneCompany airplaneCompany) throws BadRequestError {
         return ResponseEntity.ok(service.create(airplaneCompany));
     }
+
+
 }

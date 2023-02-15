@@ -31,6 +31,9 @@ public class Client extends AbstractEntity implements Serializable {
     @Column(name = "EMAIL", unique = true)
     private String email;
 
+    @Column(name = "IS_ACTIVE")
+    private Boolean isActive;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CITY_ID")
     private City city;

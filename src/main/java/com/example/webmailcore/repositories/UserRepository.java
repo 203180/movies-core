@@ -1,5 +1,6 @@
 package com.example.webmailcore.repositories;
 
+import com.example.webmailcore.models.FlightTicket;
 import com.example.webmailcore.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,9 @@ public interface UserRepository extends JpaRepository<User, String>, JpaSpecific
     User findByUsername(String username);
 
     User findByEmail(String email);
+
+    List<FlightTicket> findAllById(String userId);
+    List<FlightTicket> findAllByUsername(String username);
 
     @Override
     Page<User> findAll(Specification<User> specification, Pageable pageable);
