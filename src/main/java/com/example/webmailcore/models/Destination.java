@@ -40,6 +40,5 @@ public class Destination extends AbstractEntity {
     @JoinColumn(name = "REGION_ID")
     private DestinationRegion destinationRegion;
 
-    @Column(name = "COORDINATES", length = 4096)
-    private String coordinates;
+
 }

@@ -1,11 +1,13 @@
 package com.example.webmailcore.controllers;
 
+import com.example.webmailcore.models.Destination;
 import com.example.webmailcore.services.DestinationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -39,6 +41,24 @@ public class DestinationController {
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity get(@PathVariable(value = "id") String id) {
         return ResponseEntity.ok(destinationService.getById(id));
+    }
+
+//    @Secured({"ROLE_ADMINISTRATION"})
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity create(@RequestBody Destination destination) {
+        return ResponseEntity.ok(destinationService.create(destination));
+    }
+
+//    @Secured({"ROLE_ADMINISTRATION"})
+    @RequestMapping(method = RequestMethod.PUT)
+    public ResponseEntity update(@RequestBody Destination destination) {
+        return ResponseEntity.ok(destinationService.update(destination));
+    }
+
+//    @Secured({"ROLE_ADMINISTRATION"})
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity delete(@PathVariable(value = "id") String id) {
+        return ResponseEntity.ok(destinationService.delete(id));
     }
 
 }
