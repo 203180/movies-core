@@ -1,6 +1,7 @@
 package com.example.webmailcore.models;
 
 
+import com.example.webmailcore.enums.AncillaryType;
 import com.example.webmailcore.enums.TicketStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -72,5 +73,11 @@ public class FlightTicket extends AbstractEntity implements Serializable {
 
     @Column(name = "PRICE")
     private Double price;
+
+    @Column(name = "ANCILLARY")
+    private AncillaryType ancillary;
+
+    @Column(name = "ANCILLARY_PRICE")
+    private Double ancillaryPrice;
 
 }

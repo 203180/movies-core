@@ -42,9 +42,9 @@ public class PrivilegeService {
     public List<Privilege> all() {
         List<Privilege> privileges = privilegeRepository.findAll();
         CustomUserDetails customUserDetails = userService.getCurrentUserDetails();
-        if (!customUserDetails.getAuthorities().stream().anyMatch(r -> r.getAuthority().startsWith("ROLE_ADMINISTRATION"))) {
-            privileges.removeIf(p -> p.getName().equals("ADMINISTRATION"));
-        }
+//        if (!customUserDetails.getAuthorities().stream().anyMatch(r -> r.getAuthority().startsWith("ROLE_ADMINISTRATION"))) {
+//            privileges.removeIf(p -> p.getName().equals("ADMINISTRATION"));
+//        }
         return privileges;
     }
 

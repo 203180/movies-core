@@ -62,4 +62,29 @@ public class FlightTicketController {
         return ResponseEntity.ok(service.getAllTicketsByUser(userId));
     }
 
+    @RequestMapping(path = "/ticketStatuses", method = RequestMethod.GET)
+    public ResponseEntity getAllTicketStatuses() {
+        return ResponseEntity.ok(service.getAllTicketStatuses());
+    }
+
+    @RequestMapping(path = "/ancillaryTypes", method = RequestMethod.GET)
+    public ResponseEntity getAncillaryTypes() {
+        return ResponseEntity.ok(service.getAncillaryTypes());
+    }
+
+    @RequestMapping(path = "/ticketStatusToArrived", method = RequestMethod.PUT)
+    public FlightTicket setTicketStatusToArrived(@RequestBody FlightTicket ticket) {
+        return service.setTicketStatusToArrived(ticket.getId());
+    }
+
+    @RequestMapping(path = "/ticketStatusToCanceled", method = RequestMethod.PUT)
+    public FlightTicket setTicketStatusToCanceled(@RequestBody FlightTicket ticket) {
+        return service.setTicketStatusToCanceled(ticket.getId());
+    }
+
+    @RequestMapping(path = "/ticketStatusToDelayed", method = RequestMethod.PUT)
+    public FlightTicket setTicketStatusToDelayed(@RequestBody FlightTicket ticket) {
+        return service.setTicketStatusToDelayed(ticket.getId());
+    }
+
 }

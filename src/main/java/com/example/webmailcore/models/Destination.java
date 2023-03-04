@@ -30,11 +30,11 @@ public class Destination extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FROM_CITY_ID")
-    private DestinationCity fromCity;
+    private City fromCity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TO_CITY_ID")
-    private DestinationCity toCity;
+    private City toCity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REGION_ID")

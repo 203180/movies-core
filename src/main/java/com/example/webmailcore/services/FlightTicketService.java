@@ -1,5 +1,7 @@
 package com.example.webmailcore.services;
 
+import com.example.webmailcore.enums.AncillaryType;
+import com.example.webmailcore.enums.TicketStatus;
 import com.example.webmailcore.models.Client;
 import com.example.webmailcore.models.FlightTicket;
 import com.example.webmailcore.repositories.FlightTicketRepository;
@@ -56,6 +58,44 @@ public class FlightTicketService {
         FlightTicket flightTicket = repository.getById(id);
         repository.delete(flightTicket);
         return true;
+    }
+
+    public List<TicketStatus> getAllTicketStatuses() {
+        List<TicketStatus> ticketStatuses = new ArrayList<>();
+        for (TicketStatus ticketStatus : TicketStatus.values()) {
+            ticketStatuses.add(ticketStatus);
+        }
+        return ticketStatuses;
+    }
+
+    public List<AncillaryType> getAncillaryTypes() {
+        List<AncillaryType> ancillaryTypes = new ArrayList<>();
+        for (AncillaryType ancillaryType : AncillaryType.values()) {
+            ancillaryTypes.add(ancillaryType);
+        }
+        return ancillaryTypes;
+    }
+
+
+    public FlightTicket setTicketStatusToArrived(String ticketId) {
+        FlightTicket ticket = getById(ticketId);
+        ticket.setStatus(TicketStatus.ARRIVED);
+        ticket = repository.save(ticket);
+        return ticket;
+    }
+
+    public FlightTicket setTicketStatusToCanceled(String ticketId) {
+        FlightTicket ticket = getById(ticketId);
+        ticket.setStatus(TicketStatus.CANCELED);
+        ticket = repository.save(ticket);
+        return ticket;
+    }
+
+    public FlightTicket setTicketStatusToDelayed (String ticketId) {
+        FlightTicket ticket = getById(ticketId);
+        ticket.setStatus(TicketStatus.DELAYED);
+        ticket = repository.save(ticket);
+        return ticket;
     }
 
 }
