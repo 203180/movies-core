@@ -2,10 +2,14 @@ package com.example.webmailcore.controllers;
 
 import com.example.webmailcore.exceptions.BadRequestError;
 import com.example.webmailcore.models.AirplaneCompany;
+import com.example.webmailcore.models.DestinationPairDTO;
+import com.example.webmailcore.models.User;
 import com.example.webmailcore.services.AirplaneCompanyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -45,5 +49,21 @@ public class AirplaneCompanyController {
         return ResponseEntity.ok(service.create(airplaneCompany));
     }
 
+    @RequestMapping(path = "/getAllUsersPerAirline/{airlineId}", method = RequestMethod.GET)
+    public List<User> getAllUsersPerAirline(@PathVariable String airlineId) {
+        return service.getAllUsersPerAirline(airlineId);
+    }
+
+    @GetMapping("/airline/{airlineId}/destinations")
+    public ResponseEntity<Page<DestinationPairDTO>> getDistinctDestinationPairs(
+            @PathVariable("airlineId") String airlineId,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<DestinationPairDTO> result = service.getAllDistinctDestinationPairs(airlineId, pageable);
+
+        return ResponseEntity.ok(result);
+    }
 
 }

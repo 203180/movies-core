@@ -11,5 +11,6 @@ import java.util.List;
 public interface FlightTicketRepository extends JpaRepository<FlightTicket, String>, JpaSpecificationExecutor<FlightTicket> {
 
     List<FlightTicket> findAllByUser_Id(String userId);
+    List<FlightTicket> findAllByAirplaneCompany_Id(String airlineId);
 
 }
