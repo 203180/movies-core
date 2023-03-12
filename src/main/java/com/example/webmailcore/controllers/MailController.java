@@ -18,8 +18,8 @@ public class MailController {
     MailSenderService mailSenderService;
 
     @RequestMapping(value = "/sendMail", method = RequestMethod.POST)
-    public ResponseEntity sendMail(@RequestBody MailMessage mailMessage) throws EmailException {
-        ResponseEntity response = mailSenderService.sendMail("Test mail", "Hello,world!", "anchovasimona11@gmail.com");
+    public ResponseEntity sendMail() throws EmailException {
+        ResponseEntity response = mailSenderService.sendMail();
         return ResponseEntity.ok(response);
     }
 }

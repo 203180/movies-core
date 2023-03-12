@@ -80,4 +80,7 @@ public class FlightTicket extends AbstractEntity implements Serializable {
     @Column(name = "ANCILLARY_PRICE")
     private Double ancillaryPrice;
 
+    @Column(name = "IS_MAIL_SENT")
+    private Boolean isMailSent;
+
 }

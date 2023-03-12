@@ -72,41 +72,41 @@ public class MailboxService {
     public Page<Mailbox> all(Map<String, String> params, Pageable pageable) {
         MailboxSpecification mailboxSpecification = new MailboxSpecification();
         Iterator<Map.Entry<String, String>> iterator = params.entrySet().iterator();
-//        while (iterator.hasNext()) {
-//            Map.Entry<String, String> entry = iterator.next();
-//            if (!StringUtils.isEmpty(entry.getKey()) && !StringUtils.isEmpty(entry.getValue())) {
-//                if (entry.getKey().equals("mailType")) {
-//                    mailboxSpecification.add(new SearchCriteria("mailType", MailboxMailType.valueOf(entry.getValue()), SearchOperation.EQUAL));
-//                } else if (entry.getKey().equals("read")) {
-//                    Boolean value;
-//                    if (entry.getValue().equals("true"))
-//                        value = Boolean.TRUE;
-//                    else if (entry.getValue().equals("false"))
-//                        value = Boolean.FALSE;
-//                    else
-//                        value = null;
-//
-//                    if (value != null)
-//                        mailboxSpecification.add(new SearchCriteria(entry.getKey(), value, SearchOperation.EQUAL));
-//
-//                } else if (entry.getKey().equals("hasTickets")) {
-//                    Boolean value;
-//                    if (entry.getValue().equals("true"))
-//                        value = Boolean.TRUE;
-//                    else if (entry.getValue().equals("false"))
-//                        value = Boolean.FALSE;
-//                    else
-//                        value = null;
-//
-//                    if (value != null)
-//                        mailboxSpecification.add(new SearchCriteria(entry.getKey(), value, SearchOperation.EQUAL));
-//
-//                } else if (entry.getKey().equals("archived")) {
-//                    mailboxSpecification.add(new SearchCriteria(entry.getKey(), entry.getValue(), SearchOperation.EQUAL));
-//                } else
-//                    mailboxSpecification.add(new SearchCriteria(entry.getKey(), entry.getValue(), SearchOperation.MATCH));
-//            }
-//        }
+        while (iterator.hasNext()) {
+            Map.Entry<String, String> entry = iterator.next();
+            if (!StringUtils.isEmpty(entry.getKey()) && !StringUtils.isEmpty(entry.getValue())) {
+                if (entry.getKey().equals("mailType")) {
+                    mailboxSpecification.add(new SearchCriteria("mailType", MailboxMailType.valueOf(entry.getValue()), SearchOperation.EQUAL));
+                } else if (entry.getKey().equals("read")) {
+                    Boolean value;
+                    if (entry.getValue().equals("true"))
+                        value = Boolean.TRUE;
+                    else if (entry.getValue().equals("false"))
+                        value = Boolean.FALSE;
+                    else
+                        value = null;
+
+                    if (value != null)
+                        mailboxSpecification.add(new SearchCriteria(entry.getKey(), value, SearchOperation.EQUAL));
+
+                } else if (entry.getKey().equals("hasTickets")) {
+                    Boolean value;
+                    if (entry.getValue().equals("true"))
+                        value = Boolean.TRUE;
+                    else if (entry.getValue().equals("false"))
+                        value = Boolean.FALSE;
+                    else
+                        value = null;
+
+                    if (value != null)
+                        mailboxSpecification.add(new SearchCriteria(entry.getKey(), value, SearchOperation.EQUAL));
+
+                } else if (entry.getKey().equals("archived")) {
+                    mailboxSpecification.add(new SearchCriteria(entry.getKey(), entry.getValue(), SearchOperation.EQUAL));
+                } else
+                    mailboxSpecification.add(new SearchCriteria(entry.getKey(), entry.getValue(), SearchOperation.MATCH));
+            }
+        }
         Page<Mailbox> results = mailboxRepository.findAll(mailboxSpecification, pageable);
         return results;
     }

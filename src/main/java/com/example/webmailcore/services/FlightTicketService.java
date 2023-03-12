@@ -47,6 +47,7 @@ public class FlightTicketService {
     }
 
     public FlightTicket create(FlightTicket flightTicket) {
+        flightTicket.setIsMailSent(false);
         return repository.save(flightTicket);
     }
 
