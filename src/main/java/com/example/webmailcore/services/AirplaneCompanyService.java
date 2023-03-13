@@ -108,10 +108,13 @@ public class AirplaneCompanyService {
         Set<String> destinationPairs = new HashSet<>();
         List<DestinationPairDTO> result = new ArrayList<>();
         for (FlightTicket ticket : tickets) {
-            String pair = ticket.getCityFrom().getName() + "-" + ticket.getCityTo().getName();
-            if (!destinationPairs.contains(pair)) {
-                destinationPairs.add(pair);
-                result.add(new DestinationPairDTO(ticket.getCityFrom().getName(), ticket.getCityTo().getName(), ticket.getCountryFrom().getNameEn(), ticket.getCountryTo().getNameEn()));
+            if (ticket.getCityFrom() != null && ticket.getCityTo() != null
+                    && ticket.getCountryFrom() != null && ticket.getCountryTo() != null) {
+                String pair = ticket.getCityFrom().getName() + "-" + ticket.getCityTo().getName();
+                if (!destinationPairs.contains(pair)) {
+                    destinationPairs.add(pair);
+                    result.add(new DestinationPairDTO(ticket.getCityFrom().getName(), ticket.getCityTo().getName(), ticket.getCountryFrom().getNameEn(), ticket.getCountryTo().getNameEn()));
+                }
             }
         }
         int totalSize = result.size();
