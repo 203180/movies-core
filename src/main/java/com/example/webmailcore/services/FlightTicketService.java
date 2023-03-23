@@ -37,6 +37,11 @@ public class FlightTicketService {
         return tickets;
     }
 
+    public Page<FlightTicket> getAllTicketsByUser(String userId, Pageable pageable) {
+        Page<FlightTicket> tickets = repository.findAllByUser_Id(userId, pageable);
+        return tickets;
+    }
+
     public FlightTicket save(FlightTicket flightTicket) {
         return repository.save(flightTicket);
     }
@@ -47,7 +52,8 @@ public class FlightTicketService {
     }
 
     public FlightTicket create(FlightTicket flightTicket) {
-        flightTicket.setIsMailSent(false);
+        flightTicket.setMailSentForCanceledTicket(false);
+        flightTicket.setMailSentForDelayedTicket(false);
         return repository.save(flightTicket);
     }
 

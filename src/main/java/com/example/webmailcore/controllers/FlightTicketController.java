@@ -4,6 +4,7 @@ import com.example.webmailcore.models.FlightTicket;
 import com.example.webmailcore.services.FlightTicketService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,17 @@ public class FlightTicketController {
         return ResponseEntity.ok(service.all(filterMap, PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(orderDirection), orderBy))));
     }
 
-    @RequestMapping(path = "/all",method = RequestMethod.GET)
+    @GetMapping(path = "/allTicketsPage/{userId}")
+    public ResponseEntity<Page<FlightTicket>> getAllTicketsByUser(
+            @PathVariable(value = "userId") String userId,
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "size") Integer size
+    ) {
+        Page<FlightTicket> tickets = service.getAllTicketsByUser(userId, PageRequest.of(page, size));
+        return ResponseEntity.ok(tickets);
+    }
+
+    @RequestMapping(path = "/all", method = RequestMethod.GET)
     public ResponseEntity getAllWithoutPaging() throws IOException {
         return ResponseEntity.ok(service.getAll());
     }
@@ -57,7 +68,7 @@ public class FlightTicketController {
         return ResponseEntity.ok(service.delete(id));
     }
 
-    @RequestMapping(path = "/allByUser/{username}",method = RequestMethod.GET)
+    @RequestMapping(path = "/allByUser/{username}", method = RequestMethod.GET)
     public ResponseEntity getAllTicketsByUser(@PathVariable(value = "username") String userId) throws IOException {
         return ResponseEntity.ok(service.getAllTicketsByUser(userId));
     }
