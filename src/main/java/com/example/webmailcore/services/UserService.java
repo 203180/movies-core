@@ -254,11 +254,22 @@ public class UserService {
 
 
     public ResponseEntity enrollUsersToProgram(List<User> users, String loyaltyCardName) {
+        boolean loyaltyCardSet = false;
         for (User user : users) {
-            user.setLoyaltyCard(LoyaltyCard.valueOf(loyaltyCardName));
-            repository.save(user);
+            if (user.getLoyaltyCard() != null) {
+                return ResponseEntity.ok("User is already subscribed to another loyalty program");
+            } else {
+                user.setLoyaltyCard(LoyaltyCard.valueOf(loyaltyCardName));
+                repository.save(user);
+                loyaltyCardSet = true;
+            }
         }
-        return ResponseEntity.ok("Success");
+        if (loyaltyCardSet) {
+            return ResponseEntity.ok("Success");
+        } else {
+            return ResponseEntity.badRequest().body("User is already subscribed to another loyalty program");
+        }
+
     }
 
     public List<User> fetchUsersPerProgram(LoyaltyCard loyaltyCardName) {

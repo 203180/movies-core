@@ -1,5 +1,6 @@
 package com.example.webmailcore.services.mail;
 
+import com.example.webmailcore.enums.LoyaltyCard;
 import com.example.webmailcore.enums.MailboxMailType;
 import com.example.webmailcore.enums.TicketStatus;
 import com.example.webmailcore.models.FlightTicket;
@@ -305,6 +306,17 @@ public class MailSenderService {
         name = name.toLowerCase().replace("_", " ");
         name = Character.toUpperCase(name.charAt(0)) + name.substring(1);
 
+        int bonusKilometers = 0;
+        if (user.getLoyaltyCard().equals(LoyaltyCard.TRAVEL_PERKS)) {
+            bonusKilometers = 1000;
+        } else if (user.getLoyaltyCard().equals(LoyaltyCard.MAXIMIZING_MILES)) {
+            bonusKilometers = 3000;
+        } else if (user.getLoyaltyCard().equals(LoyaltyCard.RESERVE_CARD)){
+            bonusKilometers = 5000;
+        } else if (user.getLoyaltyCard().equals(LoyaltyCard.BLUE_CARD)) {
+            bonusKilometers = 500;
+        }
+
         HtmlEmail email = new HtmlEmail();
         email.setHostName(emailSMTPServer);
         email.setSmtpPort(587);
@@ -316,7 +328,7 @@ public class MailSenderService {
         List<InternetAddress> internetAddressList = new ArrayList<>();
         internetAddressList.add(internetAddress);
         email.setTo(internetAddressList);
-        email.setSubject(name + " Benefits Eligibility");
+        email.setSubject(name + " benefits eligibility");
         String htmlMsg = "<html>\n" +
                 "\t<body>\n" +
                 "\t\t<h1>" + name + " - benefits eligibility</h1>\n" +
@@ -328,7 +340,7 @@ public class MailSenderService {
                 "\t\t <p>Here are the benefits you can avail:</p>\n" +
                 "\t\t <ol>\n" +
                 "\t\t\t<li>Save 15% on your next booking. This discount will be applicable on the base fare of your ticket, and you can redeem it on any route of your choice.</li>\n" +
-                "\t\t\t<li>Earn 1000 bonus kilometers: We want to ensure that your travels are not just affordable but also rewarding. That's why we are giving you an additional 1000 bonus kilometers that you can use to unlock exciting benefits and privileges as part of our frequent flyer program.</li>\n" +
+                "\t\t\t<li>Earn 1000 bonus kilometers: We want to ensure that your travels are not just affordable but also rewarding. That's why we are giving you an additional " + bonusKilometers + " bonus kilometers that you can use to unlock exciting benefits and privileges as part of our frequent flyer program.</li>\n" +
                 "\t\t </ol>\n" +
                 "\t\t <p>We hope that these benefits will make your future travels with us even more enjoyable and comfortable.</p>\n" +
                 "\t\t <p>Once again, thank you for choosing us as your preferred airline, and we look forward to welcoming you on board again soon.</p>\n" +
@@ -342,7 +354,7 @@ public class MailSenderService {
                 "1. Save 15% on you next booking. This discount will be applicable on the base fare of your ticket, and you can redeem it on any route " +
                 "of your choice." +
                 "2. Earn 1000 bonus kilometers: We want to ensure that your travels are not just affordable but also rewarding. That's why we are giving you an " +
-                "additional 1000 bonus kilometers that you can use to unlock exciting benefits and privileges as part of our frequent flyer program. " +
+                "additional " + bonusKilometers + " bonus kilometers that you can use to unlock exciting benefits and privileges as part of our frequent flyer program. " +
                 "We hope that these benefits will make your future travels with us even more enjoyable and comfortable. Once again, thank you for choosing us as your " +
                 "preferred airline, and we look forward to welcoming you on board again soon. Best regards, Astra Air";
         email.setHtmlMsg(htmlMsg);
@@ -353,7 +365,7 @@ public class MailSenderService {
         mailbox.setMailType(MailboxMailType.OUTGOING);
         mailbox.setSender("Astra Air " + mailSender);
         mailbox.setRead(false);
-        mailbox.setSubject(name + " Benefits Eligibility");
+        mailbox.setSubject(name + " benefits e  ligibility");
         mailbox.setDateSent(new Date());
         mailbox.setContent(htmlMsg);
         mailbox.setContentTextOnly(msg);
