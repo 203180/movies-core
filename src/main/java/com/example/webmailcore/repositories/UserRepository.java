@@ -1,5 +1,6 @@
 package com.example.webmailcore.repositories;
 
+import com.example.webmailcore.enums.LoyaltyCard;
 import com.example.webmailcore.models.FlightTicket;
 import com.example.webmailcore.models.User;
 import org.springframework.data.domain.Page;
@@ -43,4 +44,9 @@ public interface UserRepository extends JpaRepository<User, String>, JpaSpecific
                     "        SELECT mem.GROUP_ID FROM USERS_GROUPS mem" +
                     "        WHERE mem.USER_ID = :userId))", nativeQuery = true)
     List<Object[]> getPrivilegesByUser(@Param("userId") String userId);
+
+    List<User> findAllByLoyaltyCard(LoyaltyCard loyaltyCardName);
+
+    @Query(value = "select sum(price) from flight_ticket where user_id = :userId", nativeQuery = true)
+    Double findUserExpenditureSum(String userId);
 }

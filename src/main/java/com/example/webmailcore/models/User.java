@@ -1,5 +1,7 @@
 package com.example.webmailcore.models;
 
+import com.example.webmailcore.enums.AncillaryType;
+import com.example.webmailcore.enums.LoyaltyCard;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -57,4 +59,7 @@ public class User  extends AbstractEntity implements Serializable {
     public String getDisplayName() {
         return this.getFirstName() + " " + this.getLastName();
     }
+
+    @Column(name = "LOYALTY_CARD")
+    private LoyaltyCard loyaltyCard;
 }

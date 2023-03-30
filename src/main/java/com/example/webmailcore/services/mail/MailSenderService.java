@@ -4,6 +4,7 @@ import com.example.webmailcore.enums.MailboxMailType;
 import com.example.webmailcore.enums.TicketStatus;
 import com.example.webmailcore.models.FlightTicket;
 import com.example.webmailcore.models.Mailbox;
+import com.example.webmailcore.models.User;
 import com.example.webmailcore.repositories.FlightTicketRepository;
 import com.example.webmailcore.repositories.MailboxRepository;
 import com.itextpdf.text.*;
@@ -52,7 +53,7 @@ public class MailSenderService {
     @Autowired
     FlightTicketRepository ticketRepository;
 
-//    @Scheduled(fixedRate = 60000)
+    //    @Scheduled(fixedRate = 60000)
     public ResponseEntity sendMailToDelayedTickets() throws EmailException {
         List<FlightTicket> tickets = ticketRepository.findAll();
         for (FlightTicket ticket : tickets) {
@@ -107,7 +108,7 @@ public class MailSenderService {
         return ResponseEntity.ok("Ok");
     }
 
-//    @Scheduled(fixedRate = 60000)
+    //    @Scheduled(fixedRate = 60000)
     public ResponseEntity sendMailToCanceledTickets() throws EmailException {
         List<FlightTicket> tickets = ticketRepository.findAll();
         for (FlightTicket ticket : tickets) {
@@ -296,6 +297,70 @@ public class MailSenderService {
         ticketRepository.save(ticket);
 //            }
 //        }
+        return ResponseEntity.ok("Ok");
+    }
+
+    public ResponseEntity sendMailForLoyaltyCardBenefits(User user) throws EmailException {
+        String name = user.getLoyaltyCard().name();
+        name = name.toLowerCase().replace("_", " ");
+        name = Character.toUpperCase(name.charAt(0)) + name.substring(1);
+
+        HtmlEmail email = new HtmlEmail();
+        email.setHostName(emailSMTPServer);
+        email.setSmtpPort(587);
+        email.setAuthenticator(new DefaultAuthenticator(mailSender, mailPassword));
+        email.setSSLOnConnect(true);
+        email.setFrom(mailSender);
+        InternetAddress internetAddress = new InternetAddress();
+        internetAddress.setAddress(user.getEmail());
+        List<InternetAddress> internetAddressList = new ArrayList<>();
+        internetAddressList.add(internetAddress);
+        email.setTo(internetAddressList);
+        email.setSubject(name + " Benefits Eligibility");
+        String htmlMsg = "<html>\n" +
+                "\t<body>\n" +
+                "\t\t<h1>" + name + " - benefits eligibility</h1>\n" +
+                "\t\t<p>Dear " + user.getDisplayName() + ", </p>\n" +
+                "\t\t<p>We are pleased to inform you that we appreciate your loyalty and commitment as a valuable member of our\n" +
+                "\t\tflight community. You have become eligible for exclusive benefits with your " + name + " loyalty card.</p>\n" +
+                "\t\t<p>As you may already be aware, you have spent the objective of minimum 2000 euros to be eligible\n" +
+                "\t\tto our benefits. </p>\n" +
+                "\t\t <p>Here are the benefits you can avail:</p>\n" +
+                "\t\t <ol>\n" +
+                "\t\t\t<li>Save 15% on your next booking. This discount will be applicable on the base fare of your ticket, and you can redeem it on any route of your choice.</li>\n" +
+                "\t\t\t<li>Earn 1000 bonus kilometers: We want to ensure that your travels are not just affordable but also rewarding. That's why we are giving you an additional 1000 bonus kilometers that you can use to unlock exciting benefits and privileges as part of our frequent flyer program.</li>\n" +
+                "\t\t </ol>\n" +
+                "\t\t <p>We hope that these benefits will make your future travels with us even more enjoyable and comfortable.</p>\n" +
+                "\t\t <p>Once again, thank you for choosing us as your preferred airline, and we look forward to welcoming you on board again soon.</p>\n" +
+                "\t\t <p>Best regards,</p>\n" +
+                "\t\t<p>Astra Air</p>\n" +
+                "\t</body>\n" +
+                "<html>\n";
+        String msg = "Dear " + user.getDisplayName() + ", We are pleased to inform you that we appreciate your loyalty and commitment as a valuable member" +
+                "of our flight community. You have become eligible for exclusive benefits with your " + name + " loyalty card. As you may already" +
+                "be aware, you have spent the objective of minimum 2000 euros to be eligible to our benefits. Here are the benefits you can avail: " +
+                "1. Save 15% on you next booking. This discount will be applicable on the base fare of your ticket, and you can redeem it on any route " +
+                "of your choice." +
+                "2. Earn 1000 bonus kilometers: We want to ensure that your travels are not just affordable but also rewarding. That's why we are giving you an " +
+                "additional 1000 bonus kilometers that you can use to unlock exciting benefits and privileges as part of our frequent flyer program. " +
+                "We hope that these benefits will make your future travels with us even more enjoyable and comfortable. Once again, thank you for choosing us as your " +
+                "preferred airline, and we look forward to welcoming you on board again soon. Best regards, Astra Air";
+        email.setHtmlMsg(htmlMsg);
+        email.setCharset("UTF-8");
+        email.send();
+
+        Mailbox mailbox = new Mailbox();
+        mailbox.setMailType(MailboxMailType.OUTGOING);
+        mailbox.setSender("Astra Air " + mailSender);
+        mailbox.setRead(false);
+        mailbox.setSubject(name + " Benefits Eligibility");
+        mailbox.setDateSent(new Date());
+        mailbox.setContent(htmlMsg);
+        mailbox.setContentTextOnly(msg);
+        mailbox.setHasTickets(false);
+        mailbox.setReceiver(user.getEmail());
+        mailbox.setArchived(false);
+        mailboxRepository.save(mailbox);
         return ResponseEntity.ok("Ok");
     }
 }

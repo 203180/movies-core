@@ -1,6 +1,7 @@
 package com.example.webmailcore.controllers;
 
 import com.example.webmailcore.auth.CustomUserDetails;
+import com.example.webmailcore.enums.LoyaltyCard;
 import com.example.webmailcore.exceptions.BadRequestError;
 import com.example.webmailcore.models.User;
 import com.example.webmailcore.services.UserService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/users")
@@ -23,12 +25,12 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(path = "/allByUser/{userId}",method = RequestMethod.GET)
+    @RequestMapping(path = "/allByUser/{userId}", method = RequestMethod.GET)
     public ResponseEntity getAllTicketsByUser(@PathVariable(value = "userId") String userId) throws IOException {
         return ResponseEntity.ok(userService.getAllTicketsByUser(userId));
     }
 
-    @RequestMapping(path = "/all",method = RequestMethod.GET)
+    @RequestMapping(path = "/all", method = RequestMethod.GET)
     public ResponseEntity getAllWithoutPaging() throws IOException {
         return ResponseEntity.ok(userService.getAll());
     }
@@ -95,7 +97,8 @@ public class UserController {
     public ResponseEntity getCurrentUserDetails() {
         return ResponseEntity.ok(userService.getCurrentUser());
     }
-//    @Secured({"ROLE_ADMINISTRATION", "ROLE_CLIENT_ADMIN"})
+
+    //    @Secured({"ROLE_ADMINISTRATION", "ROLE_CLIENT_ADMIN"})
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity createUser(@RequestBody User user) throws BadRequestError {
         return ResponseEntity.ok(userService.save(user));
@@ -112,7 +115,7 @@ public class UserController {
         return ResponseEntity.ok(userService.save(user));
     }
 
-    @Secured({"ROLE_ADMINISTRATION","ROLE_ASTA_ADRIA_AGENT", "ROLE_CLIENT_ADMIN", "ROLE_CLIENT"})
+    @Secured({"ROLE_ADMINISTRATION", "ROLE_ASTA_ADRIA_AGENT", "ROLE_CLIENT_ADMIN", "ROLE_CLIENT"})
     @RequestMapping(path = "/reset_password", method = RequestMethod.PUT)
     public ResponseEntity resetPassword(
             @RequestParam String username,
@@ -140,4 +143,28 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @RequestMapping(path = "/loyaltyCards", method = RequestMethod.GET)
+    public ResponseEntity getAllLoyaltyCards() {
+        return ResponseEntity.ok(userService.getAllLoyaltyCards());
+    }
+
+    @RequestMapping(path = "/enrollUsersToProgram/{loyaltyCardName}", method = RequestMethod.PUT)
+    public ResponseEntity enrollUsersToProgram(
+            @PathVariable(value = "loyaltyCardName") String loyaltyCardName,
+            @RequestBody List<User> users) {
+        return ResponseEntity.ok(userService.enrollUsersToProgram(users, loyaltyCardName));
+    }
+
+    @RequestMapping(path="/fetchUsersPerProgram/{loyaltyCardName}", method = RequestMethod.GET)
+    public ResponseEntity fetchUsersPerProgram(@PathVariable(value = "loyaltyCardName") LoyaltyCard loyaltyCardName) {
+        return ResponseEntity.ok(userService.fetchUsersPerProgram(loyaltyCardName));
+    }
+
+    @RequestMapping(path = "/fetchUsersWithExpenditureSum", method = RequestMethod.POST)
+    public ResponseEntity fetchUsersWithExpenditureSum(@RequestBody List<User> users) {
+        return ResponseEntity.ok(userService.fetchUsersWithExpenditureSum(users));
+    }
+
+
 }

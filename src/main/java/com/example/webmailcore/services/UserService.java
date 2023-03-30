@@ -1,8 +1,10 @@
 package com.example.webmailcore.services;
 
 import com.example.webmailcore.auth.CustomUserDetails;
+import com.example.webmailcore.enums.LoyaltyCard;
 import com.example.webmailcore.enums.MailMessageStatus;
 import com.example.webmailcore.enums.MailTemplateType;
+import com.example.webmailcore.enums.TicketStatus;
 import com.example.webmailcore.models.Country;
 import com.example.webmailcore.models.FlightTicket;
 import com.example.webmailcore.models.User;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -240,4 +243,38 @@ public class UserService {
     public User findByEmail(String email) {
         return repository.findByEmail(email);
     }
+
+    public List<LoyaltyCard> getAllLoyaltyCards() {
+        List<LoyaltyCard> loyaltyCards = new ArrayList<>();
+        for (LoyaltyCard loyaltyCard : LoyaltyCard.values()) {
+            loyaltyCards.add(loyaltyCard);
+        }
+        return loyaltyCards;
+    }
+
+
+    public ResponseEntity enrollUsersToProgram(List<User> users, String loyaltyCardName) {
+        for (User user : users) {
+            user.setLoyaltyCard(LoyaltyCard.valueOf(loyaltyCardName));
+            repository.save(user);
+        }
+        return ResponseEntity.ok("Success");
+    }
+
+    public List<User> fetchUsersPerProgram(LoyaltyCard loyaltyCardName) {
+        List<User> users = repository.findAllByLoyaltyCard(loyaltyCardName);
+        return users;
+    }
+
+    public Map<String, Double> fetchUsersWithExpenditureSum(List<User> users) {
+        Map<String, Double> usersWithExpenditureSum = new HashMap<>();
+        for (User user : users) {
+            Double expenditureSum = repository.findUserExpenditureSum(user.getId());
+            usersWithExpenditureSum.put(user.getId(), expenditureSum);
+        }
+        return usersWithExpenditureSum;
+    }
+
+
+
 }
