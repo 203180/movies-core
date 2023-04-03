@@ -156,7 +156,14 @@ public class UserController {
         return ResponseEntity.ok(userService.enrollUsersToProgram(users, loyaltyCardName));
     }
 
-    @RequestMapping(path="/fetchUsersPerProgram/{loyaltyCardName}", method = RequestMethod.GET)
+//    @RequestMapping(path = "/enrollUsersToProgramList/{loyaltyCardName}", method = RequestMethod.PUT)
+//    public ResponseEntity enrollUsersToProgramList(
+//            @PathVariable(value = "loyaltyCardName") String loyaltyCardName,
+//            @RequestBody List<User> users) {
+//        return ResponseEntity.ok(userService.enrollUsersToProgramList(users, loyaltyCardName));
+//    }
+
+    @RequestMapping(path = "/fetchUsersPerProgram/{loyaltyCardName}", method = RequestMethod.GET)
     public ResponseEntity fetchUsersPerProgram(@PathVariable(value = "loyaltyCardName") LoyaltyCard loyaltyCardName) {
         return ResponseEntity.ok(userService.fetchUsersPerProgram(loyaltyCardName));
     }
@@ -166,5 +173,24 @@ public class UserController {
         return ResponseEntity.ok(userService.fetchUsersWithExpenditureSum(users));
     }
 
+    @RequestMapping(path = "/allUsersWithTicketSumPriceAndCountTickets", method = RequestMethod.GET)
+    public ResponseEntity allUsersWithTicketSumPriceAndCountTickets() {
+        return ResponseEntity.ok(userService.allUsersWithTicketSumPriceAndCountTickets());
+    }
+
+    @RequestMapping(path = "/ageRanges", method = RequestMethod.GET)
+    public ResponseEntity getAllAgeRanges() {
+        return ResponseEntity.ok(userService.getAllAgeRanges());
+    }
+
+
+    @RequestMapping(path = "/filteredUsersForPromotion/{range}/{numTickets}/{minExpenditure}", method = RequestMethod.GET)
+    public ResponseEntity filteredUsersForPromotion(
+            @PathVariable(value = "range") String range,
+            @PathVariable(value = "numTickets") Integer numTickets,
+            @PathVariable(value = "minExpenditure") Integer minExpenditure
+    ) {
+        return ResponseEntity.ok(userService.filteredUsersForPromotion(range, numTickets, minExpenditure));
+    }
 
 }

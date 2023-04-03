@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,9 @@ public class User  extends AbstractEntity implements Serializable {
     @Column(name = "IS_ENABLED")
     private Boolean isEnabled;
 
+    @Column(name ="AGE")
+    private Integer age;
+
     @ManyToOne
     @JoinColumn(name = "AIRPLANE_COMPANY_ID")
     private AirplaneCompany airplaneCompany;
@@ -62,4 +66,10 @@ public class User  extends AbstractEntity implements Serializable {
 
     @Column(name = "LOYALTY_CARD")
     private LoyaltyCard loyaltyCard;
+
+    @Transient
+    private Integer totalPrice;
+
+    @Transient
+    private Integer ticketCount;
 }

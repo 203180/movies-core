@@ -1,15 +1,13 @@
 package com.example.webmailcore.services;
 
 import com.example.webmailcore.auth.CustomUserDetails;
-import com.example.webmailcore.enums.LoyaltyCard;
-import com.example.webmailcore.enums.MailMessageStatus;
-import com.example.webmailcore.enums.MailTemplateType;
-import com.example.webmailcore.enums.TicketStatus;
+import com.example.webmailcore.enums.*;
 import com.example.webmailcore.models.Country;
 import com.example.webmailcore.models.FlightTicket;
 import com.example.webmailcore.models.User;
 import com.example.webmailcore.models.idm.ForgotPasswordToken;
 import com.example.webmailcore.models.mail.MailMessage;
+import com.example.webmailcore.repositories.FlightTicketRepository;
 import com.example.webmailcore.repositories.UserRepository;
 import com.example.webmailcore.repositories.specifications.UserSpecification;
 import com.example.webmailcore.services.mail.MailMessageService;
@@ -44,6 +42,9 @@ public class UserService {
     @Lazy
     @Autowired
     MailMessageService mailMessageService;
+
+    @Autowired
+    FlightTicketRepository ticketRepository;
 
 
     @Lazy
@@ -272,6 +273,27 @@ public class UserService {
 
     }
 
+//    public List<User> enrollUsersToProgramList(List<User> users, String loyaltyCardName) {
+//        boolean loyaltyCardSet = false;
+//        for (User user : users) {
+//            if (user.getLoyaltyCard() != null) {
+//                return null;
+//            } else {
+//                user.setLoyaltyCard(LoyaltyCard.valueOf(loyaltyCardName));
+//                repository.save(user);
+//                loyaltyCardSet = true;
+//                users.add(user);
+//            }
+//        }
+//        if (loyaltyCardSet) {
+//            return users;
+//        } else {
+//            return null;
+//        }
+//
+//    }
+
+
     public List<User> fetchUsersPerProgram(LoyaltyCard loyaltyCardName) {
         List<User> users = repository.findAllByLoyaltyCard(loyaltyCardName);
         return users;
@@ -286,6 +308,45 @@ public class UserService {
         return usersWithExpenditureSum;
     }
 
+    public List<User> allUsersWithTicketSumPriceAndCountTickets() {
+        List<User> usersWithTicketSumPriceAndCountTickets = repository.findAll();
+        for (User user : usersWithTicketSumPriceAndCountTickets) {
+            List<FlightTicket> tickets = ticketRepository.findAllByUser_Id(user.getId());
+            int totalPrice = 0;
+            for (FlightTicket ticket : tickets) {
+                totalPrice += ticket.getPrice();
+            }
+            user.setTicketCount(tickets.size());
+            user.setTotalPrice(totalPrice);
+        }
+        return usersWithTicketSumPriceAndCountTickets;
+    }
+
+    public List<AgeRange> getAllAgeRanges() {
+        List<AgeRange> ageRanges = new ArrayList<>();
+        for (AgeRange ageRange : AgeRange.values()) {
+            ageRanges.add(ageRange);
+        }
+        return ageRanges;
+    }
+
+    public List<User> filteredUsersForPromotion(String range, Integer numTickets, Integer minExpenditure) {
+        List<User> users = allUsersWithTicketSumPriceAndCountTickets();
+        String[] rangeArray = range.split("-");
+        if (rangeArray.length != 2) {
+            throw new IllegalArgumentException("Invalid range format: " + range);
+        }
+        int from = Integer.parseInt(rangeArray[0]);
+        int to = Integer.parseInt(rangeArray[1]);
+
+        List<User> filteredUsers = new ArrayList<>();
+        for (User user : users) {
+            if (user.getAge() > from && user.getAge() < to && user.getTicketCount() >= numTickets && user.getTotalPrice() >= minExpenditure) {
+                filteredUsers.add(user);
+            }
+        }
+        return filteredUsers;
+    }
 
 
 }
