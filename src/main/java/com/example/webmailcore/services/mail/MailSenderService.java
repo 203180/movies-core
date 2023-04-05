@@ -365,7 +365,7 @@ public class MailSenderService {
         mailbox.setMailType(MailboxMailType.OUTGOING);
         mailbox.setSender("Astra Air " + mailSender);
         mailbox.setRead(false);
-        mailbox.setSubject(name + " benefits e  ligibility");
+        mailbox.setSubject(name + " benefits eligibility");
         mailbox.setDateSent(new Date());
         mailbox.setContent(htmlMsg);
         mailbox.setContentTextOnly(msg);
@@ -375,6 +375,63 @@ public class MailSenderService {
         mailboxRepository.save(mailbox);
         return ResponseEntity.ok("Ok");
     }
+
+    public ResponseEntity sendPromoMailToFilteredUsers(List<User> users) throws EmailException {
+        for (User user : users) {
+            HtmlEmail email = new HtmlEmail();
+            email.setHostName(emailSMTPServer);
+            email.setSmtpPort(587);
+            email.setAuthenticator(new DefaultAuthenticator(mailSender, mailPassword));
+            email.setSSLOnConnect(true);
+            email.setFrom(mailSender);
+            InternetAddress internetAddress = new InternetAddress();
+            internetAddress.setAddress(user.getEmail());
+            List<InternetAddress> internetAddressList = new ArrayList<>();
+            internetAddressList.add(internetAddress);
+            email.setTo(internetAddressList);
+            email.setSubject("Flight booking discount");
+            String htmlMsg = "<html>\n" +
+                    "\t<body>\n" +
+                    "\t\t<p>Dear " + user.getDisplayName() + ", </p>\n" +
+                    "\t\t<p>We are thrilled to inform you that you have been selected for a discount in booking a flight ticket. This \n" +
+                    "\t\tis a great opportunity for you to travel at a discounted price and we are glad to be able to offer you this exclusive deal.</p>\n" +
+                    "\t\t<p>With this discount you will be able to save 20% on your flight booking. This is a special offer \n" +
+                    "\t\tthat is available only to a select group of customers, and we are excited to have you as one of them.</p>\n" +
+                    "\t\t<p>We value your loyalty and trust in our services, and we believe that this discount is a reflection\n" +
+                    "\t\t of our appreciation for your support. We are committed to providing you the best possible travel \n" +
+                    "\t\t experience.</p>\n" +
+                    "\t\t<p>Thank you for choosing us as your travel partner, and we look forward to serving you in the future.</p>\n" +
+                    "\t\t<p>Best regards,</p>\n" +
+                    "\t\t<p>The Astra Air Team</p>\n" +
+                    "\t</body>\n" +
+                    "<html>\n" +
+                    "\n";
+            String msg = "Dear " + user.getDisplayName() + ", We are thrilled to inform you that you have been selected for a discount in booking a flight ticket. This " +
+                    "is a great opportunity for you to travel at a discounted price and we are glad to be able to offer you this exclusive deal. " +
+                    "With this discount you will be able to save 20% on your flight booking. This is a special offer that is available only to a select group of customers, and we are excited to have you as one of them." +
+                    "We value your loyalty and trust in our services, and we believe that this discount is a reflection of our appreciation for your support. We are committed to providing you the best possible travel experience. " +
+                    "Thank you for choosing us as your travel partner, and we look forward to serving you in the future. Best regards, The Astra Air Team";
+            email.setHtmlMsg(htmlMsg);
+            email.setCharset("UTF-8");
+            email.send();
+
+            Mailbox mailbox = new Mailbox();
+            mailbox.setMailType(MailboxMailType.OUTGOING);
+            mailbox.setSender("Astra Air " + mailSender);
+            mailbox.setRead(false);
+            mailbox.setSubject("Flight booking discount");
+            mailbox.setDateSent(new Date());
+            mailbox.setContent(htmlMsg);
+            mailbox.setContentTextOnly(msg);
+            mailbox.setHasTickets(false);
+            mailbox.setReceiver(user.getEmail());
+            mailbox.setArchived(false);
+            mailboxRepository.save(mailbox);
+            return ResponseEntity.ok("Ok");
+        }
+        return ResponseEntity.ok("Successfully sent");
+    }
+
 }
 
 

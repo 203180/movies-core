@@ -273,26 +273,6 @@ public class UserService {
 
     }
 
-//    public List<User> enrollUsersToProgramList(List<User> users, String loyaltyCardName) {
-//        boolean loyaltyCardSet = false;
-//        for (User user : users) {
-//            if (user.getLoyaltyCard() != null) {
-//                return null;
-//            } else {
-//                user.setLoyaltyCard(LoyaltyCard.valueOf(loyaltyCardName));
-//                repository.save(user);
-//                loyaltyCardSet = true;
-//                users.add(user);
-//            }
-//        }
-//        if (loyaltyCardSet) {
-//            return users;
-//        } else {
-//            return null;
-//        }
-//
-//    }
-
 
     public List<User> fetchUsersPerProgram(LoyaltyCard loyaltyCardName) {
         List<User> users = repository.findAllByLoyaltyCard(loyaltyCardName);

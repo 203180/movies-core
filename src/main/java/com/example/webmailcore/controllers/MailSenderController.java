@@ -25,5 +25,12 @@ public class MailSenderController {
         return ResponseEntity.ok(response);
 
     }
+
+    @RequestMapping(value = "/sendPromoMailToFilteredUsers", method = RequestMethod.POST)
+    public ResponseEntity sendPromoMailToFilteredUsers(@RequestBody List<User> users) throws EmailException {
+        ResponseEntity response = mailSenderService.sendPromoMailToFilteredUsers(users);
+        return ResponseEntity.ok(response);
+
+    }
 }
 
