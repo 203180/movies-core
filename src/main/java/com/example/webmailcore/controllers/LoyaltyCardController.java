@@ -1,10 +1,7 @@
 package com.example.webmailcore.controllers;
 
-import com.example.webmailcore.exceptions.BadRequestError;
-import com.example.webmailcore.models.AirplaneCompany;
-import com.example.webmailcore.models.DestinationRegion;
 import com.example.webmailcore.models.LoyaltyCard;
-import com.example.webmailcore.services.DestinationRegionService;
+import com.example.webmailcore.services.LoyaltyCardService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -16,14 +13,14 @@ import java.io.IOException;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping("/destinationRegions")
-public class DestinationRegionController {
+@RequestMapping("/loyaltyCards")
+public class LoyaltyCardController {
 
     @Autowired
-    DestinationRegionService destinationRegionService;
+    LoyaltyCardService loyaltyCardService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity getAll(
+    public ResponseEntity getAllLoyaltyCards(
             @RequestParam(value = "page") Integer page,
             @RequestParam(value = "size") Integer size,
             @RequestParam(value = "orderBy") String orderBy,
@@ -32,31 +29,37 @@ public class DestinationRegionController {
     ) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         HashMap filterMap = objectMapper.readValue(searchParams, HashMap.class);
-        return ResponseEntity.ok(destinationRegionService.all(filterMap, PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(orderDirection), orderBy))));
+        return ResponseEntity.ok(loyaltyCardService.all(filterMap, PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(orderDirection), orderBy))));
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/all")
-    public ResponseEntity getAllWithoutPaging(){
-        return ResponseEntity.ok(destinationRegionService.getAll());
+    //    @Secured({"ROLE_ADMINISTRATION", "ROLE_ASTA_ADRIA_AGENT"})
+    @RequestMapping(path = "/all",method = RequestMethod.GET)
+    public ResponseEntity getAllLoyaltyCardsWithoutPaging() throws IOException {
+        return ResponseEntity.ok(loyaltyCardService.getAll());
     }
+
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity get(@PathVariable(value = "id") String id) {
-        return ResponseEntity.ok(destinationRegionService.getById(id));
+    public ResponseEntity getLoyaltyCard(@PathVariable(value = "id") String id) {
+        return ResponseEntity.ok(loyaltyCardService.getById(id));
     }
 
+    //    @Secured({"ROLE_ADMINISTRATION"})
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity create(@RequestBody DestinationRegion destinationRegion) throws BadRequestError {
-        return ResponseEntity.ok(destinationRegionService.create(destinationRegion));
+    public ResponseEntity create(@RequestBody LoyaltyCard loyaltyCard) {
+        return ResponseEntity.ok(loyaltyCardService.create(loyaltyCard));
     }
 
+    //    @Secured({"ROLE_ADMINISTRATION"})
     @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity update(@RequestBody DestinationRegion destinationRegion) {
-        return ResponseEntity.ok(destinationRegionService.update(destinationRegion));
+    public ResponseEntity update(@RequestBody LoyaltyCard loyaltyCard) {
+        return ResponseEntity.ok(loyaltyCardService.update(loyaltyCard));
     }
 
+    //    @Secured({"ROLE_ADMINISTRATION"})
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity delete(@PathVariable(value = "id") String id) {
-        return ResponseEntity.ok(destinationRegionService.delete(id));
+        return ResponseEntity.ok(loyaltyCardService.delete(id));
     }
+
 }

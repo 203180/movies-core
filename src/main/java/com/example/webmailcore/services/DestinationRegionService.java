@@ -1,6 +1,8 @@
 package com.example.webmailcore.services;
 
+import com.example.webmailcore.models.City;
 import com.example.webmailcore.models.DestinationRegion;
+import com.example.webmailcore.models.LoyaltyCard;
 import com.example.webmailcore.repositories.DestinationRegionRepository;
 import com.example.webmailcore.repositories.specifications.DestinationRegionSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,4 +34,19 @@ public class DestinationRegionService {
         DestinationRegion destinationRegion = repository.getById(id);
         return destinationRegion;
     }
+
+    public DestinationRegion create(DestinationRegion destinationRegion) {
+        return repository.save(destinationRegion);
+    }
+
+    public DestinationRegion update(DestinationRegion destinationRegion) {
+        return repository.save(destinationRegion);
+    }
+
+    public Boolean delete(String id) {
+        DestinationRegion destinationRegion = repository.getById(id);
+        repository.delete(destinationRegion);
+        return true;
+    }
+
 }

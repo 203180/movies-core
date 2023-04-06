@@ -50,6 +50,10 @@ public class AirplaneCompanyService {
 //        return airplaneCompanies.stream().map(AirplaneCompany::toAirplaneCompanyDTO).collect(Collectors.toList());
 //    }
 
+    public AirplaneCompany getById(String id) {
+        AirplaneCompany airplaneCompany = repository.getById(id);
+        return airplaneCompany;
+    }
 
     public AirplaneCompany findByNameEn(String nameEn) {
         return repository.findByName(nameEn);

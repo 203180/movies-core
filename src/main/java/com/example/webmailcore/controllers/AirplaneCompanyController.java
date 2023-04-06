@@ -54,6 +54,11 @@ public class AirplaneCompanyController {
         return service.getAllUsersPerAirline(airlineId);
     }
 
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity getById(@PathVariable(value = "id") String id) {
+        return ResponseEntity.ok(service.getById(id));
+    }
+
     @GetMapping("/airline/{airlineId}/destinations")
     public ResponseEntity<Page<DestinationPairDTO>> getDistinctDestinationPairs(
             @PathVariable("airlineId") String airlineId,

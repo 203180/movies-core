@@ -3,6 +3,7 @@ package com.example.webmailcore.services;
 import com.example.webmailcore.auth.CustomUserDetails;
 import com.example.webmailcore.enums.*;
 import com.example.webmailcore.models.Country;
+import com.example.webmailcore.models.DestinationRegion;
 import com.example.webmailcore.models.FlightTicket;
 import com.example.webmailcore.models.User;
 import com.example.webmailcore.models.idm.ForgotPasswordToken;
@@ -80,6 +81,14 @@ public class UserService {
     public User get(String id) {
         User user = repository.getById(id);
         return user;
+    }
+
+    public User create(User user) {
+        return repository.save(user);
+    }
+
+    public User update(User user) {
+        return repository.save(user);
     }
 
     public User getUserByUsername(String username) {
