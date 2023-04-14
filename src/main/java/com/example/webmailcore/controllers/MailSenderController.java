@@ -1,5 +1,6 @@
 package com.example.webmailcore.controllers;
 
+import com.example.webmailcore.models.CustomPromoMailDTO;
 import com.example.webmailcore.models.User;
 import com.example.webmailcore.services.mail.MailSenderService;
 import com.itextpdf.text.DocumentException;
@@ -32,5 +33,12 @@ public class MailSenderController {
         return ResponseEntity.ok(response);
 
     }
-}
 
+    @RequestMapping(value = "/sentCustomPromoMailForFilteredUsers", method = RequestMethod.POST)
+    public ResponseEntity sentCustomPromoMailForFilteredUsers(@RequestBody CustomPromoMailDTO customPromoMailDTO) throws EmailException {
+        ResponseEntity response = mailSenderService.sentCustomPromoMailForFilteredUsers(customPromoMailDTO);
+        return ResponseEntity.ok(response);
+
+    }
+
+}

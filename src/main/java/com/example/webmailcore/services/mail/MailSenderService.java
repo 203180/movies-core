@@ -3,6 +3,7 @@ package com.example.webmailcore.services.mail;
 import com.example.webmailcore.enums.LoyaltyCard;
 import com.example.webmailcore.enums.MailboxMailType;
 import com.example.webmailcore.enums.TicketStatus;
+import com.example.webmailcore.models.CustomPromoMailDTO;
 import com.example.webmailcore.models.FlightTicket;
 import com.example.webmailcore.models.Mailbox;
 import com.example.webmailcore.models.User;
@@ -420,6 +421,43 @@ public class MailSenderService {
             mailbox.setSender("Astra Air " + mailSender);
             mailbox.setRead(false);
             mailbox.setSubject("Flight booking discount");
+            mailbox.setDateSent(new Date());
+            mailbox.setContent(htmlMsg);
+            mailbox.setContentTextOnly(msg);
+            mailbox.setHasTickets(false);
+            mailbox.setReceiver(user.getEmail());
+            mailbox.setArchived(false);
+            mailboxRepository.save(mailbox);
+            return ResponseEntity.ok("Ok");
+        }
+        return ResponseEntity.ok("Successfully sent");
+    }
+
+    public ResponseEntity sentCustomPromoMailForFilteredUsers(CustomPromoMailDTO customPromoMailDTO) throws EmailException {
+        for (User user : customPromoMailDTO.getUsers()) {
+            HtmlEmail email = new HtmlEmail();
+            email.setHostName(emailSMTPServer);
+            email.setSmtpPort(587);
+            email.setAuthenticator(new DefaultAuthenticator(mailSender, mailPassword));
+            email.setSSLOnConnect(true);
+            email.setFrom(mailSender);
+            InternetAddress internetAddress = new InternetAddress();
+            internetAddress.setAddress(user.getEmail());
+            List<InternetAddress> internetAddressList = new ArrayList<>();
+            internetAddressList.add(internetAddress);
+            email.setTo(internetAddressList);
+            email.setSubject(customPromoMailDTO.getMailSubject());
+            String htmlMsg = customPromoMailDTO.getMailContent();
+            String msg = customPromoMailDTO.getMailContent();
+            email.setHtmlMsg(htmlMsg);
+            email.setCharset("UTF-8");
+            email.send();
+
+            Mailbox mailbox = new Mailbox();
+            mailbox.setMailType(MailboxMailType.OUTGOING);
+            mailbox.setSender("Astra Air " + mailSender);
+            mailbox.setRead(false);
+            mailbox.setSubject(customPromoMailDTO.getMailSubject());
             mailbox.setDateSent(new Date());
             mailbox.setContent(htmlMsg);
             mailbox.setContentTextOnly(msg);

@@ -72,4 +72,7 @@ public class User  extends AbstractEntity implements Serializable {
 
     @Transient
     private Integer ticketCount;
+
+    @Column(name = "COUNTRY")
+    private String country;
 }

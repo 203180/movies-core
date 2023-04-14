@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -20,9 +18,6 @@ public class LoyaltyCard extends AbstractEntity {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "DESCRIPTION")
-    private String description;
-
     @Column(name = "KILOMETERS")
     private String kilometers;
 
@@ -31,4 +26,6 @@ public class LoyaltyCard extends AbstractEntity {
 
     @Column(name = "DISCOUNT")
     private String discount;
+
+
 }
