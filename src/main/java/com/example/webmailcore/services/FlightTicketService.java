@@ -2,19 +2,15 @@ package com.example.webmailcore.services;
 
 import com.example.webmailcore.enums.AncillaryType;
 import com.example.webmailcore.enums.TicketStatus;
-import com.example.webmailcore.models.Client;
 import com.example.webmailcore.models.FlightTicket;
 import com.example.webmailcore.repositories.FlightTicketRepository;
-import com.example.webmailcore.repositories.specifications.ClientSpecification;
 import com.example.webmailcore.repositories.specifications.FlightTicketSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class FlightTicketService {

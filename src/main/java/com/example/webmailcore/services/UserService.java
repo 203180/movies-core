@@ -5,10 +5,12 @@ import com.example.webmailcore.enums.*;
 import com.example.webmailcore.models.Country;
 import com.example.webmailcore.models.DestinationRegion;
 import com.example.webmailcore.models.FlightTicket;
+import com.example.webmailcore.models.LoyaltyCard;
 import com.example.webmailcore.models.User;
 import com.example.webmailcore.models.idm.ForgotPasswordToken;
 import com.example.webmailcore.models.mail.MailMessage;
 import com.example.webmailcore.repositories.FlightTicketRepository;
+import com.example.webmailcore.repositories.LoyaltyCardRepository;
 import com.example.webmailcore.repositories.UserRepository;
 import com.example.webmailcore.repositories.specifications.UserSpecification;
 import com.example.webmailcore.services.mail.MailMessageService;
@@ -51,6 +53,9 @@ public class UserService {
     @Lazy
     @Autowired
     SystemSettingsService systemSettingsService;
+
+    @Autowired
+    LoyaltyCardRepository loyaltyCardRepository;
 
     @Value("${app.base.url}")
     String BASE_URL;
@@ -254,22 +259,14 @@ public class UserService {
         return repository.findByEmail(email);
     }
 
-    public List<LoyaltyCard> getAllLoyaltyCards() {
-        List<LoyaltyCard> loyaltyCards = new ArrayList<>();
-        for (LoyaltyCard loyaltyCard : LoyaltyCard.values()) {
-            loyaltyCards.add(loyaltyCard);
-        }
-        return loyaltyCards;
-    }
-
-
     public ResponseEntity enrollUsersToProgram(List<User> users, String loyaltyCardName) {
         boolean loyaltyCardSet = false;
         for (User user : users) {
             if (user.getLoyaltyCard() != null) {
                 return ResponseEntity.ok("User is already subscribed to another loyalty program");
             } else {
-                user.setLoyaltyCard(LoyaltyCard.valueOf(loyaltyCardName));
+                LoyaltyCard loyaltyCard = loyaltyCardRepository.findByName(loyaltyCardName);
+                user.setLoyaltyCard(loyaltyCard);
                 repository.save(user);
                 loyaltyCardSet = true;
             }
@@ -283,8 +280,8 @@ public class UserService {
     }
 
 
-    public List<User> fetchUsersPerProgram(LoyaltyCard loyaltyCardName) {
-        List<User> users = repository.findAllByLoyaltyCard(loyaltyCardName);
+    public List<User> fetchUsersPerProgram(String loyaltyCardName) {
+        List<User> users = repository.findAllByLoyaltyCard_Name(loyaltyCardName);
         return users;
     }
 

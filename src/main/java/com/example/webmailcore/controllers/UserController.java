@@ -144,11 +144,6 @@ public class UserController {
         }
     }
 
-    @RequestMapping(path = "/loyaltyCards", method = RequestMethod.GET)
-    public ResponseEntity getAllLoyaltyCards() {
-        return ResponseEntity.ok(userService.getAllLoyaltyCards());
-    }
-
     @RequestMapping(path = "/enrollUsersToProgram/{loyaltyCardName}", method = RequestMethod.PUT)
     public ResponseEntity enrollUsersToProgram(
             @PathVariable(value = "loyaltyCardName") String loyaltyCardName,
@@ -164,7 +159,7 @@ public class UserController {
 //    }
 
     @RequestMapping(path = "/fetchUsersPerProgram/{loyaltyCardName}", method = RequestMethod.GET)
-    public ResponseEntity fetchUsersPerProgram(@PathVariable(value = "loyaltyCardName") LoyaltyCard loyaltyCardName) {
+    public ResponseEntity fetchUsersPerProgram(@PathVariable(value = "loyaltyCardName") String loyaltyCardName) {
         return ResponseEntity.ok(userService.fetchUsersPerProgram(loyaltyCardName));
     }
 

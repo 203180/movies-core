@@ -32,10 +32,10 @@ public class AuthController {
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-        try {
+            try {
             User user = userService.getUserByUsername(authenticationRequest.getUsername());
             if (user == null) {
-                return ResponseEntity.badRequest().body("Incorrect username or password");
+                return ResponseEntity.badRequest().body("Your username or password is incorrect.");
             } else if (user.getIsEnabled() == null || !user.getIsEnabled()) {
                 return ResponseEntity.badRequest().body("User is disabled");
             }

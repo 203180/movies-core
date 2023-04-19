@@ -1,7 +1,9 @@
 package com.example.webmailcore.controllers;
 
+import com.example.webmailcore.exceptions.BadRequestError;
 import com.example.webmailcore.models.FlightTicket;
 import com.example.webmailcore.services.FlightTicketService;
+import com.example.webmailcore.validators.TicketValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +21,9 @@ public class FlightTicketController {
 
     @Autowired
     FlightTicketService service;
+
+    @Autowired
+    TicketValidator validator;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity getAll(
@@ -54,7 +59,8 @@ public class FlightTicketController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity create(@RequestBody FlightTicket flightTicket) {
+    public ResponseEntity create(@RequestBody FlightTicket flightTicket) throws BadRequestError {
+        validator.validateTicketCompleteness(flightTicket);
         return ResponseEntity.ok(service.create(flightTicket));
     }
 

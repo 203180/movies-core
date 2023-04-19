@@ -45,7 +45,9 @@ public interface UserRepository extends JpaRepository<User, String>, JpaSpecific
                     "        WHERE mem.USER_ID = :userId))", nativeQuery = true)
     List<Object[]> getPrivilegesByUser(@Param("userId") String userId);
 
-    List<User> findAllByLoyaltyCard(LoyaltyCard loyaltyCardName);
+    List<User> findAllByLoyaltyCard(String loyaltyCardName);
+
+    List<User> findAllByLoyaltyCard_Name(String loyaltyCardName);
 
     @Query(value = "select sum(price) from flight_ticket where user_id = :userId", nativeQuery = true)
     Double findUserExpenditureSum(String userId);

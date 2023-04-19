@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LoyaltyCardRepository extends JpaRepository<LoyaltyCard, String>, JpaSpecificationExecutor<LoyaltyCard> {
+
+    LoyaltyCard findByName(String name);
 }

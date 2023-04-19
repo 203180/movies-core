@@ -303,7 +303,7 @@ public class MailSenderService {
     }
 
     public ResponseEntity sendMailForLoyaltyCardBenefits(User user) throws EmailException {
-        String name = user.getLoyaltyCard().name();
+        String name = user.getLoyaltyCard().getName();
         name = name.toLowerCase().replace("_", " ");
         name = Character.toUpperCase(name.charAt(0)) + name.substring(1);
 
